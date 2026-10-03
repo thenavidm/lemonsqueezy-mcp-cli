@@ -1,0 +1,5751 @@
+[
+  {
+    "name": "list_affiliates",
+    "method": "GET",
+    "path": "/affiliates",
+    "title": "List affiliates",
+    "description": "Retrieves a paginated list of all affiliates.",
+    "group": "affiliates",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[user_email]",
+        "key": "user_email",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact native filter value."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[store_id]",
+        "key": "store_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/affiliates/list-all-affiliates"
+  },
+  {
+    "name": "get_affiliate",
+    "method": "GET",
+    "path": "/affiliates/{id}",
+    "title": "Get affiliate",
+    "description": "Retrieves the affiliate with the given ID.",
+    "group": "affiliates",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/affiliates/retrieve-affiliate"
+  },
+  {
+    "name": "create_checkout",
+    "method": "POST",
+    "path": "/checkouts",
+    "title": "Create checkout",
+    "description": "Creates a unique checkout for a specific variant with specified attributes.",
+    "group": "checkouts",
+    "risk": "destructive",
+    "params": [],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "checkouts"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "custom_price": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "product_options": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": ""
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": ""
+                    },
+                    "media": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "maxItems": 100
+                    },
+                    "redirect_url": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": ""
+                    },
+                    "receipt_button_text": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": ""
+                    },
+                    "receipt_link_url": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": ""
+                    },
+                    "receipt_thank_you_note": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": ""
+                    },
+                    "enabled_variants": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "maxItems": 100
+                    },
+                    "confirmation_title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": ""
+                    },
+                    "confirmation_message": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": ""
+                    },
+                    "confirmation_button_text": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": ""
+                    }
+                  },
+                  "required": [],
+                  "additionalProperties": false
+                },
+                "checkout_options": {
+                  "type": "object",
+                  "properties": {
+                    "embed": {
+                      "type": "boolean"
+                    },
+                    "media": {
+                      "type": "boolean"
+                    },
+                    "logo": {
+                      "type": "boolean"
+                    },
+                    "desc": {
+                      "type": "boolean"
+                    },
+                    "discount": {
+                      "type": "boolean"
+                    },
+                    "skip_trial": {
+                      "type": "boolean"
+                    },
+                    "subscription_preview": {
+                      "type": "boolean"
+                    },
+                    "dark": {
+                      "type": "boolean"
+                    },
+                    "background_color": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Native checkout hex color."
+                    },
+                    "headings_color": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Native checkout hex color."
+                    },
+                    "primary_text_color": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Native checkout hex color."
+                    },
+                    "secondary_text_color": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Native checkout hex color."
+                    },
+                    "links_color": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Native checkout hex color."
+                    },
+                    "borders_color": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Native checkout hex color."
+                    },
+                    "checkbox_color": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Native checkout hex color."
+                    },
+                    "active_state_color": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Native checkout hex color."
+                    },
+                    "button_color": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Native checkout hex color."
+                    },
+                    "button_text_color": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Native checkout hex color."
+                    },
+                    "terms_privacy_color": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Native checkout hex color."
+                    },
+                    "locale": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "bg",
+                        "hr",
+                        "cs",
+                        "da",
+                        "nl",
+                        "en",
+                        "et",
+                        "fil",
+                        "fi",
+                        "fr",
+                        "de",
+                        "el",
+                        "hu",
+                        "id",
+                        "it",
+                        "ja",
+                        "ko",
+                        "lv",
+                        "lt",
+                        "ms",
+                        "mt",
+                        "pl",
+                        "pt",
+                        "ro",
+                        "ru",
+                        "zh-CN",
+                        "sk",
+                        "sl",
+                        "es",
+                        "sv",
+                        "th",
+                        "tr",
+                        "vi",
+                        null
+                      ]
+                    }
+                  },
+                  "required": [],
+                  "additionalProperties": false
+                },
+                "checkout_data": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "",
+                      "format": "email"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": ""
+                    },
+                    "billing_address": {
+                      "type": "object",
+                      "properties": {
+                        "country": {
+                          "type": "string",
+                          "minLength": 1,
+                          "description": "",
+                          "pattern": "^[A-Z]{2}$"
+                        },
+                        "zip": {
+                          "type": "string",
+                          "minLength": 1,
+                          "description": ""
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    },
+                    "tax_number": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": ""
+                    },
+                    "discount_code": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": ""
+                    },
+                    "custom": {
+                      "type": "object",
+                      "maxProperties": 100,
+                      "description": "Native custom checkout data. Private and untrusted; never credentials."
+                    },
+                    "variant_quantities": {
+                      "type": "array",
+                      "maxItems": 100,
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "variant_id": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quantity": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "required": [
+                          "variant_id",
+                          "quantity"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [],
+                  "additionalProperties": false
+                },
+                "preview": {
+                  "type": "boolean"
+                },
+                "test_mode": {
+                  "type": "boolean"
+                },
+                "expires_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "relationships": {
+              "type": "object",
+              "properties": {
+                "store": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "stores"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "description": "Exact opaque native resource ID; no traversal or URL.",
+                          "pattern": "^[A-Za-z0-9_-]+$",
+                          "maxLength": 256
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                },
+                "variant": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "variants"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "description": "Exact opaque native resource ID; no traversal or URL.",
+                          "pattern": "^[A-Za-z0-9_-]+$",
+                          "maxLength": 256
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "store",
+                "variant"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "attributes",
+            "relationships"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": true,
+    "attributes": {
+      "custom_price": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "product_options": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": ""
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "description": ""
+          },
+          "media": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            },
+            "maxItems": 100
+          },
+          "redirect_url": {
+            "type": "string",
+            "minLength": 1,
+            "description": ""
+          },
+          "receipt_button_text": {
+            "type": "string",
+            "minLength": 1,
+            "description": ""
+          },
+          "receipt_link_url": {
+            "type": "string",
+            "minLength": 1,
+            "description": ""
+          },
+          "receipt_thank_you_note": {
+            "type": "string",
+            "minLength": 1,
+            "description": ""
+          },
+          "enabled_variants": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxItems": 100
+          },
+          "confirmation_title": {
+            "type": "string",
+            "minLength": 1,
+            "description": ""
+          },
+          "confirmation_message": {
+            "type": "string",
+            "minLength": 1,
+            "description": ""
+          },
+          "confirmation_button_text": {
+            "type": "string",
+            "minLength": 1,
+            "description": ""
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "checkout_options": {
+        "type": "object",
+        "properties": {
+          "embed": {
+            "type": "boolean"
+          },
+          "media": {
+            "type": "boolean"
+          },
+          "logo": {
+            "type": "boolean"
+          },
+          "desc": {
+            "type": "boolean"
+          },
+          "discount": {
+            "type": "boolean"
+          },
+          "skip_trial": {
+            "type": "boolean"
+          },
+          "subscription_preview": {
+            "type": "boolean"
+          },
+          "dark": {
+            "type": "boolean"
+          },
+          "background_color": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native checkout hex color."
+          },
+          "headings_color": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native checkout hex color."
+          },
+          "primary_text_color": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native checkout hex color."
+          },
+          "secondary_text_color": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native checkout hex color."
+          },
+          "links_color": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native checkout hex color."
+          },
+          "borders_color": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native checkout hex color."
+          },
+          "checkbox_color": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native checkout hex color."
+          },
+          "active_state_color": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native checkout hex color."
+          },
+          "button_color": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native checkout hex color."
+          },
+          "button_text_color": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native checkout hex color."
+          },
+          "terms_privacy_color": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native checkout hex color."
+          },
+          "locale": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "bg",
+              "hr",
+              "cs",
+              "da",
+              "nl",
+              "en",
+              "et",
+              "fil",
+              "fi",
+              "fr",
+              "de",
+              "el",
+              "hu",
+              "id",
+              "it",
+              "ja",
+              "ko",
+              "lv",
+              "lt",
+              "ms",
+              "mt",
+              "pl",
+              "pt",
+              "ro",
+              "ru",
+              "zh-CN",
+              "sk",
+              "sl",
+              "es",
+              "sv",
+              "th",
+              "tr",
+              "vi",
+              null
+            ]
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "checkout_data": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "minLength": 1,
+            "description": "",
+            "format": "email"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": ""
+          },
+          "billing_address": {
+            "type": "object",
+            "properties": {
+              "country": {
+                "type": "string",
+                "minLength": 1,
+                "description": "",
+                "pattern": "^[A-Z]{2}$"
+              },
+              "zip": {
+                "type": "string",
+                "minLength": 1,
+                "description": ""
+              }
+            },
+            "required": [],
+            "additionalProperties": false
+          },
+          "tax_number": {
+            "type": "string",
+            "minLength": 1,
+            "description": ""
+          },
+          "discount_code": {
+            "type": "string",
+            "minLength": 1,
+            "description": ""
+          },
+          "custom": {
+            "type": "object",
+            "maxProperties": 100,
+            "description": "Native custom checkout data. Private and untrusted; never credentials."
+          },
+          "variant_quantities": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "type": "object",
+              "properties": {
+                "variant_id": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quantity": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "variant_id",
+                "quantity"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "preview": {
+        "type": "boolean"
+      },
+      "test_mode": {
+        "type": "boolean"
+      },
+      "expires_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time"
+      }
+    },
+    "attributeRequired": [],
+    "relationships": {
+      "store": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "stores"
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact opaque native resource ID; no traversal or URL.",
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "maxLength": 256
+              }
+            },
+            "required": [
+              "type",
+              "id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "variant": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "variants"
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact opaque native resource ID; no traversal or URL.",
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "maxLength": 256
+              }
+            },
+            "required": [
+              "type",
+              "id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "relationshipRequired": [
+      "store",
+      "variant"
+    ],
+    "includes": [
+      "store",
+      "variant"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/checkouts/create-checkout"
+  },
+  {
+    "name": "list_checkouts",
+    "method": "GET",
+    "path": "/checkouts",
+    "title": "List checkouts",
+    "description": "Returns a paginated list of checkouts.",
+    "group": "checkouts",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[variant_id]",
+        "key": "variant_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated supported primary relationship names: store, variant."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[store_id]",
+        "key": "store_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "variant"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/checkouts/list-all-checkouts"
+  },
+  {
+    "name": "get_checkout",
+    "method": "GET",
+    "path": "/checkouts/{id}",
+    "title": "Get checkout",
+    "description": "Retrieves the checkout with the given ID.",
+    "group": "checkouts",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated supported primary relationship names: store, variant."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "variant"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/checkouts/retrieve-checkout"
+  },
+  {
+    "name": "create_customer",
+    "method": "POST",
+    "path": "/customers",
+    "title": "Create customer",
+    "description": "Creates a customer with given attributes.",
+    "group": "customers",
+    "risk": "destructive",
+    "params": [],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "customers"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": ""
+                },
+                "email": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "",
+                  "format": "email"
+                },
+                "city": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": ""
+                },
+                "region": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": ""
+                },
+                "country": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "",
+                  "pattern": "^[A-Z]{2}$"
+                }
+              },
+              "required": [
+                "name",
+                "email"
+              ],
+              "additionalProperties": false
+            },
+            "relationships": {
+              "type": "object",
+              "properties": {
+                "store": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "stores"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "description": "Exact opaque native resource ID; no traversal or URL.",
+                          "pattern": "^[A-Za-z0-9_-]+$",
+                          "maxLength": 256
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "store"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "attributes",
+            "relationships"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "description": ""
+      },
+      "email": {
+        "type": "string",
+        "minLength": 1,
+        "description": "",
+        "format": "email"
+      },
+      "city": {
+        "type": "string",
+        "minLength": 1,
+        "description": ""
+      },
+      "region": {
+        "type": "string",
+        "minLength": 1,
+        "description": ""
+      },
+      "country": {
+        "type": "string",
+        "minLength": 1,
+        "description": "",
+        "pattern": "^[A-Z]{2}$"
+      }
+    },
+    "attributeRequired": [
+      "name",
+      "email"
+    ],
+    "relationships": {
+      "store": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "stores"
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact opaque native resource ID; no traversal or URL.",
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "maxLength": 256
+              }
+            },
+            "required": [
+              "type",
+              "id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "relationshipRequired": [
+      "store"
+    ],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/customers/create-customer"
+  },
+  {
+    "name": "list_customers",
+    "method": "GET",
+    "path": "/customers",
+    "title": "List customers",
+    "description": "Retrieves a paginated list of all customers.",
+    "group": "customers",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[email]",
+        "key": "email",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact native filter value."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[store_id]",
+        "key": "store_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store, orders, subscriptions, license-keys."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "orders",
+      "subscriptions",
+      "license-keys"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/customers/list-all-customers"
+  },
+  {
+    "name": "get_customer",
+    "method": "GET",
+    "path": "/customers/{id}",
+    "title": "Get customer",
+    "description": "Retrieves the customer with the given ID.",
+    "group": "customers",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store, orders, subscriptions, license-keys."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "orders",
+      "subscriptions",
+      "license-keys"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/customers/retrieve-customer"
+  },
+  {
+    "name": "update_customer",
+    "method": "PATCH",
+    "path": "/customers/{id}",
+    "title": "Update customer",
+    "description": "Updates the customer with the given ID and provided attributes.",
+    "group": "customers",
+    "risk": "destructive",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "customers"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": ""
+                },
+                "email": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "",
+                  "format": "email"
+                },
+                "city": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": ""
+                },
+                "region": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": ""
+                },
+                "country": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "",
+                  "pattern": "^[A-Z]{2}$"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "archived"
+                  ]
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Exact opaque native resource ID; no traversal or URL.",
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "maxLength": 256
+            }
+          },
+          "required": [
+            "type",
+            "attributes",
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "description": ""
+      },
+      "email": {
+        "type": "string",
+        "minLength": 1,
+        "description": "",
+        "format": "email"
+      },
+      "city": {
+        "type": "string",
+        "minLength": 1,
+        "description": ""
+      },
+      "region": {
+        "type": "string",
+        "minLength": 1,
+        "description": ""
+      },
+      "country": {
+        "type": "string",
+        "minLength": 1,
+        "description": "",
+        "pattern": "^[A-Z]{2}$"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "archived"
+        ]
+      }
+    },
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/customers/update-customer"
+  },
+  {
+    "name": "list_discount_redemptions",
+    "method": "GET",
+    "path": "/discount-redemptions",
+    "title": "List discount redemptions",
+    "description": "Returns a paginated list of discount redemptions.",
+    "group": "discount-redemptions",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[order_id]",
+        "key": "order_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[discount_id]",
+        "key": "discount_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: discount, order."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "discount",
+      "order"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/discount-redemptions/list-all-discount-redemptions"
+  },
+  {
+    "name": "get_discount_redemption",
+    "method": "GET",
+    "path": "/discount-redemptions/{id}",
+    "title": "Get discount redemption",
+    "description": "Retrieves the discount redemption with the given ID.",
+    "group": "discount-redemptions",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: discount, order."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "discount",
+      "order"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/discount-redemptions/retrieve-discount-redemption"
+  },
+  {
+    "name": "create_discount",
+    "method": "POST",
+    "path": "/discounts",
+    "title": "Create discount",
+    "description": "Create a discount.",
+    "group": "discounts",
+    "risk": "destructive",
+    "params": [],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "discounts"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": ""
+                },
+                "code": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "",
+                  "pattern": "^[A-Z0-9]{3,256}$"
+                },
+                "amount": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "amount_type": {
+                  "type": "string",
+                  "enum": [
+                    "fixed",
+                    "percent"
+                  ]
+                },
+                "is_limited_to_products": {
+                  "type": "boolean"
+                },
+                "is_limited_redemptions": {
+                  "type": "boolean"
+                },
+                "max_redemptions": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "starts_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "expires_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "duration": {
+                  "type": "string",
+                  "enum": [
+                    "once",
+                    "repeating",
+                    "forever"
+                  ]
+                },
+                "duration_in_months": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "test_mode": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "name",
+                "code",
+                "amount",
+                "amount_type"
+              ],
+              "additionalProperties": false
+            },
+            "relationships": {
+              "type": "object",
+              "properties": {
+                "store": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "stores"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "description": "Exact opaque native resource ID; no traversal or URL.",
+                          "pattern": "^[A-Za-z0-9_-]+$",
+                          "maxLength": 256
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                },
+                "variants": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "minItems": 1,
+                      "maxItems": 100,
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "const": "variants"
+                          },
+                          "id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "description": "Exact opaque native resource ID; no traversal or URL.",
+                            "pattern": "^[A-Za-z0-9_-]+$",
+                            "maxLength": 256
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "id"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "store"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "attributes",
+            "relationships"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "description": ""
+      },
+      "code": {
+        "type": "string",
+        "minLength": 1,
+        "description": "",
+        "pattern": "^[A-Z0-9]{3,256}$"
+      },
+      "amount": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "amount_type": {
+        "type": "string",
+        "enum": [
+          "fixed",
+          "percent"
+        ]
+      },
+      "is_limited_to_products": {
+        "type": "boolean"
+      },
+      "is_limited_redemptions": {
+        "type": "boolean"
+      },
+      "max_redemptions": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "starts_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time"
+      },
+      "expires_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time"
+      },
+      "duration": {
+        "type": "string",
+        "enum": [
+          "once",
+          "repeating",
+          "forever"
+        ]
+      },
+      "duration_in_months": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "test_mode": {
+        "type": "boolean"
+      }
+    },
+    "attributeRequired": [
+      "name",
+      "code",
+      "amount",
+      "amount_type"
+    ],
+    "relationships": {
+      "store": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "stores"
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact opaque native resource ID; no traversal or URL.",
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "maxLength": 256
+              }
+            },
+            "required": [
+              "type",
+              "id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "variants": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "const": "variants"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Exact opaque native resource ID; no traversal or URL.",
+                  "pattern": "^[A-Za-z0-9_-]+$",
+                  "maxLength": 256
+                }
+              },
+              "required": [
+                "type",
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "relationshipRequired": [
+      "store"
+    ],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/discounts/create-discount"
+  },
+  {
+    "name": "delete_discount",
+    "method": "DELETE",
+    "path": "/discounts/{id}",
+    "title": "Delete discount",
+    "description": "Delete a discount with the given ID.",
+    "group": "discounts",
+    "risk": "destructive",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/discounts/delete-discount"
+  },
+  {
+    "name": "list_discounts",
+    "method": "GET",
+    "path": "/discounts",
+    "title": "List discounts",
+    "description": "Returns a paginated list of discounts.",
+    "group": "discounts",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[store_id]",
+        "key": "store_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store, variants, discount-redemptions."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "variants",
+      "discount-redemptions"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/discounts/list-all-discounts"
+  },
+  {
+    "name": "get_discount",
+    "method": "GET",
+    "path": "/discounts/{id}",
+    "title": "Get discount",
+    "description": "Retrieves the discount with the given ID.",
+    "group": "discounts",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store, variants, discount-redemptions."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "variants",
+      "discount-redemptions"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/discounts/retrieve-discount"
+  },
+  {
+    "name": "list_files",
+    "method": "GET",
+    "path": "/files",
+    "title": "List files",
+    "description": "Returns a paginated list of files.",
+    "group": "files",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[variant_id]",
+        "key": "variant_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: variant."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "variant"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/files/list-all-files"
+  },
+  {
+    "name": "get_file",
+    "method": "GET",
+    "path": "/files/{id}",
+    "title": "Get file",
+    "description": "Retrieves the file with the given ID.",
+    "group": "files",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: variant."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "variant"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/files/retrieve-file"
+  },
+  {
+    "name": "activate_license",
+    "method": "POST",
+    "path": "/licenses/activate",
+    "title": "Activate license",
+    "description": "Use the selected private profile license credential for native activate license. No global API-key fallback; customer metadata stays private.",
+    "group": "license-api",
+    "risk": "destructive",
+    "params": [],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "instance_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "New native activation instance label."
+        }
+      },
+      "required": [
+        "instance_name"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "instance_name": {
+        "type": "string",
+        "minLength": 1,
+        "description": "New native activation instance label."
+      }
+    },
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": true,
+    "source": "https://docs.lemonsqueezy.com/api/license-api/activate-license-key"
+  },
+  {
+    "name": "deactivate_license",
+    "method": "POST",
+    "path": "/licenses/deactivate",
+    "title": "Deactivate license",
+    "description": "Use the selected private profile license credential for native deactivate license. No global API-key fallback; customer metadata stays private.",
+    "group": "license-api",
+    "risk": "destructive",
+    "params": [],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "instance_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native instance ID returned by activation."
+        }
+      },
+      "required": [
+        "instance_id"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "instance_id": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Native instance ID returned by activation."
+      }
+    },
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": true,
+    "source": "https://docs.lemonsqueezy.com/api/license-api/deactivate-license-key"
+  },
+  {
+    "name": "validate_license",
+    "method": "POST",
+    "path": "/licenses/validate",
+    "title": "Validate license",
+    "description": "Use the selected private profile license credential for native validate license. No global API-key fallback; customer metadata stays private.",
+    "group": "license-api",
+    "risk": "read",
+    "params": [],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "instance_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native instance ID returned by activation."
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "instance_id": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Native instance ID returned by activation."
+      }
+    },
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": true,
+    "source": "https://docs.lemonsqueezy.com/api/license-api/validate-license-key"
+  },
+  {
+    "name": "list_license_key_instances",
+    "method": "GET",
+    "path": "/license-key-instances",
+    "title": "List license key instances",
+    "description": "Returns a paginated list of license key instances.",
+    "group": "license-key-instances",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[license_key_id]",
+        "key": "license_key_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: license-key."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "license-key"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/license-key-instances/list-all-license-key-instances"
+  },
+  {
+    "name": "get_license_key_instance",
+    "method": "GET",
+    "path": "/license-key-instances/{id}",
+    "title": "Get license key instance",
+    "description": "Retrieves the license key instance with the given ID.",
+    "group": "license-key-instances",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: license-key."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "license-key"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/license-key-instances/retrieve-license-key-instance"
+  },
+  {
+    "name": "list_license_keys",
+    "method": "GET",
+    "path": "/license-keys",
+    "title": "List license keys",
+    "description": "Returns a paginated list of license keys.",
+    "group": "license-keys",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[order_id]",
+        "key": "order_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[order_item_id]",
+        "key": "order_item_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[product_id]",
+        "key": "product_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[status]",
+        "key": "status",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact native filter value."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[store_id]",
+        "key": "store_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store, customer, order, order-item, product, license-key-instances."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "customer",
+      "order",
+      "order-item",
+      "product",
+      "license-key-instances"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/license-keys/list-all-license-keys"
+  },
+  {
+    "name": "get_license_key",
+    "method": "GET",
+    "path": "/license-keys/{id}",
+    "title": "Get license key",
+    "description": "Retrieves the license key with the given ID.",
+    "group": "license-keys",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store, customer, order, order-item, product, license-key-instances."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "customer",
+      "order",
+      "order-item",
+      "product",
+      "license-key-instances"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/license-keys/retrieve-license-key"
+  },
+  {
+    "name": "update_license_key",
+    "method": "PATCH",
+    "path": "/license-keys/{id}",
+    "title": "Update license key",
+    "description": "Updates the license key with the given ID and provided attributes.",
+    "group": "license-keys",
+    "risk": "destructive",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "license-keys"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "activation_limit": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "expires_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "disabled": {
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Exact opaque native resource ID; no traversal or URL.",
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "maxLength": 256
+            }
+          },
+          "required": [
+            "type",
+            "attributes",
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "activation_limit": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "minimum": 0
+      },
+      "expires_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time"
+      },
+      "disabled": {
+        "type": "boolean"
+      }
+    },
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/license-keys/update-license-key"
+  },
+  {
+    "name": "list_order_items",
+    "method": "GET",
+    "path": "/order-items",
+    "title": "List order items",
+    "description": "Returns a paginated list of order items.",
+    "group": "order-items",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[product_id]",
+        "key": "product_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[variant_id]",
+        "key": "variant_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[order_id]",
+        "key": "order_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: order, product, variant."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "order",
+      "product",
+      "variant"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/order-items/list-all-order-items"
+  },
+  {
+    "name": "get_order_item",
+    "method": "GET",
+    "path": "/order-items/{id}",
+    "title": "Get order item",
+    "description": "Retrieves the order item with the given ID.",
+    "group": "order-items",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: order, product, variant."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "order",
+      "product",
+      "variant"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/order-items/retrieve-order-item"
+  },
+  {
+    "name": "generate_order_invoice",
+    "method": "POST",
+    "path": "/orders/{id}/generate-invoice",
+    "title": "Generate order invoice",
+    "description": "Generates a new invoice for the given order with given attributes.",
+    "group": "orders",
+    "risk": "destructive",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "name",
+        "key": "name",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "address",
+        "key": "address",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "city",
+        "key": "city",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "state",
+        "key": "state",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "zip_code",
+        "key": "zip_code",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "country",
+        "key": "country",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "notes",
+        "key": "notes",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "locale",
+        "key": "locale",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": true,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/orders/generate-order-invoice"
+  },
+  {
+    "name": "refund_order",
+    "method": "POST",
+    "path": "/orders/{id}/refund",
+    "title": "Refund order",
+    "description": "Issue the exact requested partial refund, or an explicitly named full refund. Local approval required; no automatic replay.",
+    "group": "orders",
+    "risk": "destructive",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "orders"
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Exact opaque native resource ID; no traversal or URL.",
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "maxLength": 256
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "id",
+            "attributes"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "amount": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/orders/issue-refund"
+  },
+  {
+    "name": "list_orders",
+    "method": "GET",
+    "path": "/orders",
+    "title": "List orders",
+    "description": "Returns a paginated list of orders.",
+    "group": "orders",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[user_email]",
+        "key": "user_email",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact native filter value."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[order_number]",
+        "key": "order_number",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact native filter value."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[store_id]",
+        "key": "store_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store, customer, order-items, subscriptions, license-keys, discount-redemptions."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "customer",
+      "order-items",
+      "subscriptions",
+      "license-keys",
+      "discount-redemptions"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/orders/list-all-orders"
+  },
+  {
+    "name": "get_order",
+    "method": "GET",
+    "path": "/orders/{id}",
+    "title": "Get order",
+    "description": "Retrieves the order with the given ID.",
+    "group": "orders",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store, customer, order-items, subscriptions, license-keys, discount-redemptions."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "customer",
+      "order-items",
+      "subscriptions",
+      "license-keys",
+      "discount-redemptions"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/orders/retrieve-order"
+  },
+  {
+    "name": "list_prices",
+    "method": "GET",
+    "path": "/prices",
+    "title": "List prices",
+    "description": "Retrieves a paginated list of prices.",
+    "group": "prices",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[variant_id]",
+        "key": "variant_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: variant."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "variant"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/prices/list-all-prices"
+  },
+  {
+    "name": "get_price",
+    "method": "GET",
+    "path": "/prices/{id}",
+    "title": "Get price",
+    "description": "Retrieves the price with the given ID.",
+    "group": "prices",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: variant."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "variant"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/prices/retrieve-price"
+  },
+  {
+    "name": "list_products",
+    "method": "GET",
+    "path": "/products",
+    "title": "List products",
+    "description": "Retrieves a paginated list of all products.",
+    "group": "products",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[store_id]",
+        "key": "store_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store, variants."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "variants"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/products/list-all-products"
+  },
+  {
+    "name": "get_product",
+    "method": "GET",
+    "path": "/products/{id}",
+    "title": "Get product",
+    "description": "Retrieves the product with the given ID.",
+    "group": "products",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store, variants."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "variants"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/products/retrieve-product"
+  },
+  {
+    "name": "list_stores",
+    "method": "GET",
+    "path": "/stores",
+    "title": "List stores",
+    "description": "Retrieves a paginated list of all stores.",
+    "group": "stores",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: products, orders, subscriptions, discounts, license-keys, webhooks."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "products",
+      "orders",
+      "subscriptions",
+      "discounts",
+      "license-keys",
+      "webhooks"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/stores/list-all-stores"
+  },
+  {
+    "name": "get_store",
+    "method": "GET",
+    "path": "/stores/{id}",
+    "title": "Get store",
+    "description": "Retrieves the store with the given ID.",
+    "group": "stores",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: products, orders, subscriptions, discounts, license-keys, webhooks."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "products",
+      "orders",
+      "subscriptions",
+      "discounts",
+      "license-keys",
+      "webhooks"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/stores/retrieve-store"
+  },
+  {
+    "name": "generate_subscription_invoice",
+    "method": "POST",
+    "path": "/subscription-invoices/{id}/generate-invoice",
+    "title": "Generate subscription invoice",
+    "description": "Generates a new invoice for the given subscription with given parameters.",
+    "group": "subscription-invoices",
+    "risk": "destructive",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "name",
+        "key": "name",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "address",
+        "key": "address",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "city",
+        "key": "city",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "state",
+        "key": "state",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "zip_code",
+        "key": "zip_code",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "country",
+        "key": "country",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "notes",
+        "key": "notes",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "locale",
+        "key": "locale",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Native invoice query field; US/CA state is required."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": true,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "subscription",
+      "customer",
+      "affiliate"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/subscription-invoices/generate-subscription-invoice"
+  },
+  {
+    "name": "refund_subscription_invoice",
+    "method": "POST",
+    "path": "/subscription-invoices/{id}/refund",
+    "title": "Refund subscription invoice",
+    "description": "Issue the exact requested partial refund, or an explicitly named full refund. Local approval required; no automatic replay.",
+    "group": "subscription-invoices",
+    "risk": "destructive",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "subscription-invoices"
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Exact opaque native resource ID; no traversal or URL.",
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "maxLength": 256
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "id",
+            "attributes"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "amount": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "subscription",
+      "customer",
+      "affiliate"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/subscription-invoices/issue-refund"
+  },
+  {
+    "name": "list_subscription_invoices",
+    "method": "GET",
+    "path": "/subscription-invoices",
+    "title": "List subscription invoices",
+    "description": "Returns a paginated list of subscription invoices.",
+    "group": "subscription-invoices",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[status]",
+        "key": "status",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact native filter value."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[refunded]",
+        "key": "refunded",
+        "schema": {
+          "type": "boolean"
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[subscription_id]",
+        "key": "subscription_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated supported primary relationship names: store, subscription, customer, affiliate."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[store_id]",
+        "key": "store_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "subscription",
+      "customer"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/subscription-invoices/list-all-subscription-invoices"
+  },
+  {
+    "name": "get_subscription_invoice",
+    "method": "GET",
+    "path": "/subscription-invoices/{id}",
+    "title": "Get subscription invoice",
+    "description": "Retrieves the subscription invoice with the given ID.",
+    "group": "subscription-invoices",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated supported primary relationship names: store, subscription, customer, affiliate."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "subscription",
+      "customer"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/subscription-invoices/retrieve-subscription-invoice"
+  },
+  {
+    "name": "list_subscription_items",
+    "method": "GET",
+    "path": "/subscription-items",
+    "title": "List subscription items",
+    "description": "Returns a paginated list of subscriptions items.",
+    "group": "subscription-items",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[price_id]",
+        "key": "price_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated supported primary relationship names: subscription, price, usage-records."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[subscription_id]",
+        "key": "subscription_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "subscription",
+      "price",
+      "usage-records"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/subscription-items/list-all-subscription-items"
+  },
+  {
+    "name": "get_subscription_item_current_usage",
+    "method": "GET",
+    "path": "/subscription-items/{id}/current-usage",
+    "title": "Get subscription item current usage",
+    "description": "Retrieves the unit usage for a subscription item for the current billing period.",
+    "group": "subscription-items",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "subscription",
+      "price",
+      "usage-records"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/subscription-items/retrieve-subscription-item-current-usage"
+  },
+  {
+    "name": "get_subscription_item",
+    "method": "GET",
+    "path": "/subscription-items/{id}",
+    "title": "Get subscription item",
+    "description": "Retrieves the subscription item with the given ID.",
+    "group": "subscription-items",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated supported primary relationship names: subscription, price, usage-records."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "subscription",
+      "price",
+      "usage-records"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/subscription-items/retrieve-subscription-item"
+  },
+  {
+    "name": "update_subscription_item",
+    "method": "PATCH",
+    "path": "/subscription-items/{id}",
+    "title": "Update subscription item",
+    "description": "Updates the subscription with the given ID and provided attributes.",
+    "group": "subscription-items",
+    "risk": "destructive",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "subscription-items"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "invoice_immediately": {
+                  "type": "boolean"
+                },
+                "disable_prorations": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "quantity"
+              ],
+              "additionalProperties": false
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Exact opaque native resource ID; no traversal or URL.",
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "maxLength": 256
+            }
+          },
+          "required": [
+            "type",
+            "attributes",
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "quantity": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "invoice_immediately": {
+        "type": "boolean"
+      },
+      "disable_prorations": {
+        "type": "boolean"
+      }
+    },
+    "attributeRequired": [
+      "quantity"
+    ],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "subscription",
+      "price",
+      "usage-records"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/subscription-items/update-subscription-item"
+  },
+  {
+    "name": "cancel_subscription",
+    "method": "DELETE",
+    "path": "/subscriptions/{id}",
+    "title": "Cancel subscription",
+    "description": "Cancels an active subscription.",
+    "group": "subscriptions",
+    "risk": "destructive",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/subscriptions/cancel-subscription"
+  },
+  {
+    "name": "list_subscriptions",
+    "method": "GET",
+    "path": "/subscriptions",
+    "title": "List subscriptions",
+    "description": "Returns a paginated list of subscriptions.",
+    "group": "subscriptions",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[order_id]",
+        "key": "order_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[order_item_id]",
+        "key": "order_item_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[product_id]",
+        "key": "product_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[variant_id]",
+        "key": "variant_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[user_email]",
+        "key": "user_email",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact native filter value."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[status]",
+        "key": "status",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact native filter value."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[store_id]",
+        "key": "store_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store, customer, order, order-item, product, variant, subscription-items, subscription-invoices."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "customer",
+      "order",
+      "order-item",
+      "product",
+      "variant",
+      "subscription-items",
+      "subscription-invoices"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/subscriptions/list-all-subscriptions"
+  },
+  {
+    "name": "get_subscription",
+    "method": "GET",
+    "path": "/subscriptions/{id}",
+    "title": "Get subscription",
+    "description": "Retrieves the subscription with the given ID.",
+    "group": "subscriptions",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store, customer, order, order-item, product, variant, subscription-items, subscription-invoices."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store",
+      "customer",
+      "order",
+      "order-item",
+      "product",
+      "variant",
+      "subscription-items",
+      "subscription-invoices"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/subscriptions/retrieve-subscription"
+  },
+  {
+    "name": "update_subscription",
+    "method": "PATCH",
+    "path": "/subscriptions/{id}",
+    "title": "Update subscription",
+    "description": "Updates the subscription with the given ID and provided attributes.",
+    "group": "subscriptions",
+    "risk": "destructive",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "subscriptions"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "variant_id": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "pause": {
+                  "anyOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "mode": {
+                          "type": "string",
+                          "enum": [
+                            "void",
+                            "free"
+                          ]
+                        },
+                        "resumes_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "mode"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "cancelled": {
+                  "type": "boolean"
+                },
+                "trial_ends_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "billing_anchor": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 31
+                },
+                "invoice_immediately": {
+                  "type": "boolean"
+                },
+                "disable_prorations": {
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Exact opaque native resource ID; no traversal or URL.",
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "maxLength": 256
+            }
+          },
+          "required": [
+            "type",
+            "attributes",
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "variant_id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "pause": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "void",
+                  "free"
+                ]
+              },
+              "resumes_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "mode"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "cancelled": {
+        "type": "boolean"
+      },
+      "trial_ends_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time"
+      },
+      "billing_anchor": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "minimum": 0,
+        "maximum": 31
+      },
+      "invoice_immediately": {
+        "type": "boolean"
+      },
+      "disable_prorations": {
+        "type": "boolean"
+      }
+    },
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/subscriptions/update-subscription"
+  },
+  {
+    "name": "create_usage_record",
+    "method": "POST",
+    "path": "/usage-records",
+    "title": "Create usage record",
+    "description": "Create a usage record.",
+    "group": "usage-records",
+    "risk": "destructive",
+    "params": [],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "usage-records"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "action": {
+                  "type": "string",
+                  "enum": [
+                    "increment",
+                    "set"
+                  ]
+                }
+              },
+              "required": [
+                "quantity"
+              ],
+              "additionalProperties": false
+            },
+            "relationships": {
+              "type": "object",
+              "properties": {
+                "subscription-item": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "subscription-items"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "description": "Exact opaque native resource ID; no traversal or URL.",
+                          "pattern": "^[A-Za-z0-9_-]+$",
+                          "maxLength": 256
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "subscription-item"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "attributes",
+            "relationships"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "quantity": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "action": {
+        "type": "string",
+        "enum": [
+          "increment",
+          "set"
+        ]
+      }
+    },
+    "attributeRequired": [
+      "quantity"
+    ],
+    "relationships": {
+      "subscription-item": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "subscription-items"
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact opaque native resource ID; no traversal or URL.",
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "maxLength": 256
+              }
+            },
+            "required": [
+              "type",
+              "id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "relationshipRequired": [
+      "subscription-item"
+    ],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/usage-records/create-usage-record"
+  },
+  {
+    "name": "list_usage_records",
+    "method": "GET",
+    "path": "/usage-records",
+    "title": "List usage records",
+    "description": "Returns a paginated list of usage records.",
+    "group": "usage-records",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[subscription_item_id]",
+        "key": "subscription_item_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: subscription-item."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "subscription-item"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/usage-records/list-all-usage-records"
+  },
+  {
+    "name": "get_usage_record",
+    "method": "GET",
+    "path": "/usage-records/{id}",
+    "title": "Get usage record",
+    "description": "Retrieves the usage record with the given ID.",
+    "group": "usage-records",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: subscription-item."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "subscription-item"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/usage-records/retrieve-usage-record"
+  },
+  {
+    "name": "get_user",
+    "method": "GET",
+    "path": "/users/me",
+    "title": "Get user",
+    "description": "Retrieves the currently authenticated user.",
+    "group": "users",
+    "risk": "read",
+    "params": [],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/users/retrieve-user"
+  },
+  {
+    "name": "list_variants",
+    "method": "GET",
+    "path": "/variants",
+    "title": "List variants",
+    "description": "Retrieves a paginated list of variants.",
+    "group": "variants",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[status]",
+        "key": "status",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact native filter value."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[product_id]",
+        "key": "product_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: product, files, price-model."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "product",
+      "files",
+      "price-model"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/variants/list-all-variants"
+  },
+  {
+    "name": "get_variant",
+    "method": "GET",
+    "path": "/variants/{id}",
+    "title": "Get variant",
+    "description": "Retrieves the variant with the given ID.",
+    "group": "variants",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: product, files, price-model."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "product",
+      "files",
+      "price-model"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/variants/retrieve-variant"
+  },
+  {
+    "name": "create_webhook",
+    "method": "POST",
+    "path": "/webhooks",
+    "title": "Create webhook",
+    "description": "Creates a webhook.",
+    "group": "webhooks",
+    "risk": "destructive",
+    "params": [],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "webhooks"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "",
+                  "format": "uri"
+                },
+                "events": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 100,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": ""
+                  }
+                },
+                "secret": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Private signing secret; prefer payload_file. Never echo or log."
+                },
+                "test_mode": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "url",
+                "events",
+                "secret"
+              ],
+              "additionalProperties": false
+            },
+            "relationships": {
+              "type": "object",
+              "properties": {
+                "store": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "stores"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "description": "Exact opaque native resource ID; no traversal or URL.",
+                          "pattern": "^[A-Za-z0-9_-]+$",
+                          "maxLength": 256
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "id"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "store"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "attributes",
+            "relationships"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "url": {
+        "type": "string",
+        "minLength": 1,
+        "description": "",
+        "format": "uri"
+      },
+      "events": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 100,
+        "items": {
+          "type": "string",
+          "minLength": 1,
+          "description": ""
+        }
+      },
+      "secret": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Private signing secret; prefer payload_file. Never echo or log."
+      },
+      "test_mode": {
+        "type": "boolean"
+      }
+    },
+    "attributeRequired": [
+      "url",
+      "events",
+      "secret"
+    ],
+    "relationships": {
+      "store": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "stores"
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact opaque native resource ID; no traversal or URL.",
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "maxLength": 256
+              }
+            },
+            "required": [
+              "type",
+              "id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "relationshipRequired": [
+      "store"
+    ],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/webhooks/create-webhook"
+  },
+  {
+    "name": "delete_webhook",
+    "method": "DELETE",
+    "path": "/webhooks/{id}",
+    "title": "Delete webhook",
+    "description": "Delete a webhook with the given ID.",
+    "group": "webhooks",
+    "risk": "destructive",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/webhooks/delete-webhook"
+  },
+  {
+    "name": "list_webhooks",
+    "method": "GET",
+    "path": "/webhooks",
+    "title": "List webhooks",
+    "description": "Returns a paginated list of webhooks.",
+    "group": "webhooks",
+    "risk": "read",
+    "params": [
+      {
+        "name": "page[number]",
+        "key": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "page[size]",
+        "key": "per_page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Native page size; default10, max100."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "filter[store_id]",
+        "key": "store_id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256,
+          "description": "Exact native resource ID."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/webhooks/list-all-webhooks"
+  },
+  {
+    "name": "get_webhook",
+    "method": "GET",
+    "path": "/webhooks/{id}",
+    "title": "Get webhook",
+    "description": "Retrieves the webhook with the given ID.",
+    "group": "webhooks",
+    "risk": "read",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      },
+      {
+        "name": "include",
+        "key": "include",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comma-separated native relationships from pinned official SDK: store."
+        },
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": null,
+    "bodyRequired": false,
+    "privateOutput": false,
+    "attributes": {},
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [
+      "store"
+    ],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/webhooks/retrieve-webhook"
+  },
+  {
+    "name": "update_webhook",
+    "method": "PATCH",
+    "path": "/webhooks/{id}",
+    "title": "Update webhook",
+    "description": "Updates the webhook with the given ID and provided attributes.",
+    "group": "webhooks",
+    "risk": "destructive",
+    "params": [
+      {
+        "name": "id",
+        "key": "id",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact opaque native resource ID; no traversal or URL.",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "maxLength": 256
+        },
+        "in": "path",
+        "required": true,
+        "style": "form",
+        "explode": false
+      }
+    ],
+    "bodySchema": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "webhooks"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "",
+                  "format": "uri"
+                },
+                "events": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 100,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": ""
+                  }
+                },
+                "secret": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Private replacement signing secret; prefer payload_file."
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Exact opaque native resource ID; no traversal or URL.",
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "maxLength": 256
+            }
+          },
+          "required": [
+            "type",
+            "attributes",
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bodyRequired": true,
+    "privateOutput": false,
+    "attributes": {
+      "url": {
+        "type": "string",
+        "minLength": 1,
+        "description": "",
+        "format": "uri"
+      },
+      "events": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 100,
+        "items": {
+          "type": "string",
+          "minLength": 1,
+          "description": ""
+        }
+      },
+      "secret": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Private replacement signing secret; prefer payload_file."
+      }
+    },
+    "attributeRequired": [],
+    "relationships": {},
+    "relationshipRequired": [],
+    "includes": [],
+    "licenseAPI": false,
+    "source": "https://docs.lemonsqueezy.com/api/webhooks/update-webhook"
+  }
+]

@@ -1,0 +1,1 @@
+import assert from'node:assert/strict';import{ALL_TOOLS}from'../dist/tools/index.js';assert.equal(ALL_TOOLS.length,65);assert.equal(ALL_TOOLS.filter(t=>t.risk==='read').length,44);assert.equal(ALL_TOOLS.filter(t=>t.risk!=='read').length,21);console.log(JSON.stringify({tools:65,reads:44,confirmed:21}));

@@ -1,0 +1,19 @@
+{
+  "source": "https://docs.lemonsqueezy.com/api",
+  "checked": "2026-10-03",
+  "sanitizedSnapshotSha256": "a79d48cc6168298929622ec49a8052b4f8c0afaeb7d7515508c85951b3151432",
+  "schemaType": "Reviewed native contracts transcribed from current provider documentation and pinned official SDK; not an official OpenAPI export.",
+  "endpoints": 60,
+  "officialSDK": {
+    "repo": "lmsqueezy/lemonsqueezy.js",
+    "version": "4.0.0",
+    "sha": "b1f66e905ee0614be87c3711d6529f2582e5729f"
+  },
+  "corrections": [
+    "Usage record read headings say POST; native curl, official SDK and community use GET.",
+    "Invoice generation is confirmed POST with query fields, not JSON body.",
+    "Native license API form encoding and independent credentials.",
+    "Refund omission means full refund; requires explicit full_refund intent.",
+    "Resource-object examples omit relationships; include allowlists are sourced from pinned official SDK Data relationship types."
+  ]
+}

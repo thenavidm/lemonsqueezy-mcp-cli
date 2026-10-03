@@ -1,0 +1,108 @@
+{
+  "manifest_version": "0.2",
+  "name": "lemonsqueezy",
+  "display_name": "Lemon Squeezy MCP Server & CLI",
+  "version": "2.0.0",
+  "description": "65 shared tasks for current Lemon Squeezy commerce, private main/license credentials, approved effects, reviewed batches and bounded exports.",
+  "long_description": "60 reviewed native operations plus five local helpers through shared CLI/local MCP. Main-key test/live verification is separate from license mode and store ownership. All21effects require confirmation; no retries or automatic continuation. Signed outputs stay in new private files. Official SDK and community strengths remain credited.",
+  "author": {
+    "name": "Navid Moazzez",
+    "url": "https://navid.me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thenavidm/lemonsqueezy-mcp-cli"
+  },
+  "homepage": "https://navid.me/mcp-servers/lemonsqueezy",
+  "documentation": "https://github.com/thenavidm/lemonsqueezy-mcp-cli#readme",
+  "support": "https://github.com/thenavidm/lemonsqueezy-mcp-cli/issues",
+  "license": "AGPL-3.0",
+  "keywords": [
+    "lemonsqueezy",
+    "commerce",
+    "subscriptions",
+    "licenses",
+    "mcp",
+    "cli"
+  ],
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/server/index.js"
+      ],
+      "env": {
+        "LEMONSQUEEZY_API_KEY": "${user_config.api_key}",
+        "LEMONSQUEEZY_TOKEN_FILE": "${user_config.token_file}",
+        "LEMONSQUEEZY_READ_ONLY": "${user_config.read_only}",
+        "LEMONSQUEEZY_ALLOW_DESTRUCTIVE": "${user_config.allow_destructive}",
+        "LEMONSQUEEZY_MODE": "${user_config.mode}",
+        "LEMONSQUEEZY_LICENSE_KEY": "${user_config.license_key}",
+        "LEMONSQUEEZY_LICENSE_FILE": "${user_config.license_file}"
+      }
+    }
+  },
+  "user_config": {
+    "api_key": {
+      "type": "string",
+      "title": "Private main API key",
+      "description": "Private main Bearer API key in the intended test/live mode. Choose this OR token_file. Keep outside repositories.",
+      "sensitive": true,
+      "required": false
+    },
+    "token_file": {
+      "type": "string",
+      "title": "Private API key file",
+      "description": "Absolute owner-private regular non-symlink file outside repositories. Choose instead of api_key; restrict Windows ACLs.",
+      "sensitive": true,
+      "required": false
+    },
+    "read_only": {
+      "type": "boolean",
+      "title": "Read only",
+      "description": "Hide and directly refuse all21native/local effects, including private exports.",
+      "default": false,
+      "required": false
+    },
+    "allow_destructive": {
+      "type": "boolean",
+      "title": "Allow explicitly confirmed operations",
+      "description": "False refuses confirmed operations too.",
+      "default": true,
+      "required": false
+    },
+    "mode": {
+      "type": "string",
+      "title": "Main API key mode",
+      "description": "test or live; defaulttest. Checked with native users/me. Does not prove license mode or store ownership.",
+      "default": "test",
+      "required": false
+    },
+    "license_key": {
+      "type": "string",
+      "title": "Private independent license key",
+      "description": "Purchased license key for native License API only; choose this OR license_file. Main API credentials are separate.",
+      "sensitive": true,
+      "required": false
+    },
+    "license_file": {
+      "type": "string",
+      "title": "Private license-only file",
+      "description": "Absolute owner-private regular non-symlink license-only file outside repositories; choose instead of license_key. Restrict Windows ACLs.",
+      "sensitive": true,
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
+    "runtimes": {
+      "node": ">=22"
+    }
+  }
+}
