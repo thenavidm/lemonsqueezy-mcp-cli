@@ -1,12 +1,13 @@
 {
   "name": "@thenavidm/lemonsqueezy-mcp-cli",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Lemon Squeezy shared task CLI and local MCP for current JSON:API, independent private license credentials, approved commerce tasks, reviewed batches and bounded private exports.",
   "type": "module",
   "main": "./dist/index.js",
   "bin": {
     "lemonsqueezy-mcp": "dist/index.js",
-    "lemonsqueezy-cli": "dist/index.js"
+    "lemonsqueezy-cli": "dist/index.js",
+    "lemonsqueezy-mcp-cli": "dist/npx.js"
   },
   "engines": {
     "node": ">=22"

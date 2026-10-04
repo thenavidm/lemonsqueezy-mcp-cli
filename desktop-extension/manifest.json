@@ -2,7 +2,7 @@
   "manifest_version": "0.2",
   "name": "lemonsqueezy",
   "display_name": "Lemon Squeezy MCP Server & CLI",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "65 shared tasks for current Lemon Squeezy commerce, private main/license credentials, approved effects, reviewed batches and bounded exports.",
   "long_description": "60 reviewed native operations plus five local helpers through shared CLI/local MCP. Main-key test/live verification is separate from license mode and store ownership. All21effects require confirmation; no retries or automatic continuation. Signed outputs stay in new private files. Official SDK and community strengths remain credited.",
   "author": {
