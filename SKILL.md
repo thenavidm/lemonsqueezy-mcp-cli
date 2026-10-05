@@ -15,7 +15,7 @@ lemonsqueezy-cli schema refund-order
 lemonsqueezy-cli list-accounts --agent
 ~~~
 
-All 19 native effects plus batch execution and private export require explicit local confirm. LEMONSQUEEZY_READ_ONLY=1 hides all 21 effects and refuses direct hidden confirmed calls through the actual handler. LEMONSQUEEZY_ALLOW_DESTRUCTIVE=0 refuses them even when confirmed. --agent and --yes change output/input formatting only, never approval. The same guard covers CLI and MCP, including POST license activation/deactivation and signed-output generation.
+All 19 native effects plus batch execution and private export require explicit local confirm. LEMONSQUEEZY_READ_ONLY=1 hides all 21 effects and refuses direct hidden confirmed calls through the actual handler. LEMONSQUEEZY_ALLOW_DESTRUCTIVE=0 refuses them even when confirmed. --agent and --yes change output/input formatting only, never approval. The same guard covers CLI and MCP, including POST license activation/deactivation and signed-output generation. Over MCP the person approves each in the client's own prompt or form; confirm:true counts only where the client cannot ask. lemonsqueezy-cli which <words> finds the command for a task.
 
 READ_ONLY controls this process, not other clients or provider automations. Native access rights, financial correctness, license entitlement and customer authorization stay separate. Main-key mode checks are native reads, not store ownership checks. A local review hash is not a provider-issued approval token or state lock. No automatic retries or guessed continuations are performed after an uncertain effect.
 
@@ -79,7 +79,8 @@ lemonsqueezy-cli schema refund-order
 | Exit | Meaning |
 | --- | --- |
 | 0 | Success; a license valid:false remains a native data verdict |
-| 2 | Usage/invalid input/refused effect |
+| 1 | Unexpected error |
+| 2 | Usage/invalid input/refused effect, an unknown command or a hidden write |
 | 3 | Not found |
 | 4 | Authentication/permission |
 | 5 | Native API/unknown transport error |

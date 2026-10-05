@@ -32,5 +32,5 @@ Choose it for the owned shared task CLI/local MCP, private profiles, explicit pe
 
 MCP can load all schemas, defer discovery or select individual tools; the client's loading mode changes overhead. CLI tasks still need help/schema discovery, command execution and model-readable output. --agent uses compact JSON formatting and --select can narrow results, without changing the requested native operation or proving cheaper successful completion.
 
-Codex is the current validation priority. No equivalent completed provider task/token benchmark exists for this release. Record model, client/package versions, date, loading settings, equivalent requested outcome, actual input/output/cache token usage and latency before publishing measured comparisons. Character estimates, tool counts, synthetic discovery and borrowed integration numbers are not task benchmarks. Claude Code-specific measurements remain deferred at Navid's instruction.
+README section 7 has this package's measured Claude Code and Codex costs against 2.0.1. No other offering was measured, so no comparison with one is claimed.
 

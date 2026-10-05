@@ -6,14 +6,23 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { loadConfig } from '../src/config.js';
 import { LemonSqueezyClient } from '../src/api/client.js';
-import { buildServer } from '../src/server.js';
+import {createApp} from '../src/app.js';import {connect as slipwayConnect} from '@thenavidm/slipway/testing';
+
+/** The write policy comes from the environment on Slipway, as it does in use: this is the one a config describes. */
+function policy(prefix:string,config:{readOnly?:boolean;allowDestructive?:boolean;auditPath?:string}):Record<string,string>{return{...(config.readOnly?{[`${prefix}_READ_ONLY`]:'1'}:{}),...(config.allowDestructive===false?{[`${prefix}_ALLOW_DESTRUCTIVE`]:'0'}:{}),...(config.auditPath?{[`${prefix}_AUDIT_LOG`]:config.auditPath}:{})};}
+/** Slipway's schema check answers in the MCP SDK's own plain text, "Input validation error: …"; these tests read every error as JSON, so it is wrapped as {error}. */
+function jsonError(r:any){const text=r.content?.[0]?.text??'';try{JSON.parse(text);return r;}catch{return{...r,content:[{type:'text',text:JSON.stringify({error:text})}]};}}
+/** The SDK client's calls these tests were written against, over the real Slipway server. A hidden tool is a protocol error there; it comes back as the error result a client sees. */
+function adapt(mcp:Awaited<ReturnType<typeof slipwayConnect>>){return{listTools:async()=>({tools:await mcp.listTools()}),callTool:async({name,arguments:args}:{name:string;arguments?:Record<string,unknown>}):Promise<any>=>{try{const r:any=await mcp.callTool(name,args??{});return r.isError?jsonError(r):r;}catch(e){return{isError:true,content:[{type:'text',text:JSON.stringify({error:(e as Error).message})}]};}},close:()=>mcp.close()};}
+/** One tool call through the real server, as the 2.x guard-and-handler helper made it: the result's data, or its error thrown. */
+async function viaServer(prefix:string,config:any,client:any,name:string,args:Record<string,unknown>):Promise<any>{const mcp=await slipwayConnect(createApp({context:()=>({config,client})}),{env:policy(prefix,config)});try{const r:any=await mcp.callTool(name,args);const text=(r.content as any[])?.[0]?.text??'';if(r.isError)throw new Error(text);try{return JSON.parse(text);}catch{return text;}}finally{await mcp.close();}}
 
 type Call={url:URL;init:RequestInit};
 async function fixture(options:{env?:NodeJS.ProcessEnv;noKey?:boolean;responder?:(call:Call,index:number)=>Response|Promise<Response>}={}){
  const calls:Call[]=[];const config=loadConfig({LEMONSQUEEZY_MIN_REQUEST_INTERVAL_MS:'0',...(options.noKey?{}:{LEMONSQUEEZY_API_KEY:'fixture-api-a',LEMONSQUEEZY_LICENSE_KEY:'fixture-license-a'}),...options.env});
  const fetcher=(async(url:any,init:RequestInit)=>{const call={url:new URL(String(url)),init};calls.push(call);if(options.responder)return options.responder(call,calls.length-1);if(call.url.pathname==='/v1/users/me')return Response.json({meta:{test_mode:true},data:{type:'users',id:'fixture',attributes:{}}});return Response.json({data:{type:'customers',id:'created',attributes:{}}});}) as typeof fetch;
- const api=new LemonSqueezyClient(config,fetcher),server=buildServer(config,api),client=new Client({name:'lemon-native-fixture',version:'1'});const[a,b]=InMemoryTransport.createLinkedPair();await server.connect(a);await client.connect(b);
- const call=async(name:string,args:Record<string,any>={})=>{const result=await client.callTool({name,arguments:args});return{result,value:JSON.parse((result.content as any[])[0].text)};};return{calls,api,client,call,close:async()=>{await client.close();await server.close();}};
+ const api=new LemonSqueezyClient(config,fetcher);const mcp=await slipwayConnect(createApp({context:()=>({config,client:api})}),{env:policy('LEMONSQUEEZY',config)});const client=adapt(mcp);
+ const call=async(name:string,args:Record<string,any>={})=>{const result=await client.callTool({name,arguments:args});return{result,value:JSON.parse((result.content as any[])[0].text)};};return{calls,api,client,call,close:()=>mcp.close()};
 }
 const identity=()=>Response.json({meta:{test_mode:true},data:{type:'users',id:'fixture'}});
 describe('reviewed native API and isolated credentials',()=>{

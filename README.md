@@ -11,7 +11,7 @@
 
 Lemon Squeezy MCP server and CLI for Codex and AI agents. 65 shared tasks for current commerce, subscriptions and licenses, private profiles, reviewed batches and bounded exports.
 
-Built and maintained by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=referral&utm_campaign=lemonsqueezy-mcp-cli&utm_content=readme). Full setup is on [navid.me](https://navid.me/mcp-servers/lemonsqueezy).
+Built and maintained by [Navid Moazzez](https://navid.me?utm_source=github&utm_medium=referral&utm_campaign=lemonsqueezy-mcp-cli&utm_content=readme). Built on [Slipway](https://github.com/thenavidm/slipway), which turns one definition of each tool into the MCP server and the CLI. Full setup is on [navid.me](https://navid.me/mcp-servers/lemonsqueezy).
 
 <img src="https://cdn.navid.me/repos/lemonsqueezy-mcp-cli-retina.gif" alt="Illustrated Lemon Squeezy workflow in the actual house terminal component" width="520">
 
@@ -208,7 +208,7 @@ Alternatively install the CLI, make SKILL.md available to Claude, and use shell 
 
 ### Install the .mcpb extension
 
-1. Download `lemonsqueezy-2.0.0.mcpb` from [GitHub Releases](https://github.com/thenavidm/lemonsqueezy-mcp-cli/releases/latest).
+1. Download `lemonsqueezy-3.0.0.mcpb` from [GitHub Releases](https://github.com/thenavidm/lemonsqueezy-mcp-cli/releases/latest).
 2. In a supported Claude Desktop build, open **Settings > Extensions > Advanced settings > Install Extension…** and select it.
 3. Configure the private main API key OR token-only file and its actual test/live mode. Configure the independent license key OR license file only if needed. Leave unused credential sources empty. Named profiles require private manual runtime settings.
 4. Enable read-only if you want only the 44 read/helper operations. Reconnect and verify the intended profile with one deliberate read.
@@ -369,12 +369,13 @@ lemonsqueezy-cli list-orders --per-page 5 --agent --select data.id,meta.page
 lemonsqueezy-cli schema refund-order
 ~~~
 
---json returns parsed native objects, --compact emits one line, --agent requests JSON/compact/no-input/no-color/yes formatting, and --select limits model-readable fields. None provides effect approval. Repeated array flags such as --tasks each take one JSON object. Native bodies use payload or an absolute regular non-symlink payload_file capped at 1 MiB. CLI commands use hyphens; MCP names use underscores.
+--json returns parsed native objects, --compact emits one line, --agent requests compact JSON with no prompts and never confirms, and --select limits model-readable fields. None provides effect approval. Repeated array flags such as --tasks each take one JSON object. Native bodies use payload or an absolute regular non-symlink payload_file capped at 1 MiB. CLI commands use hyphens; MCP names use underscores.
 
 | Exit | Meaning |
 | --- | --- |
 | 0 | Success; a license valid:false remains a native data verdict |
-| 2 | Usage/invalid input/refused effect |
+| 1 | Unexpected error |
+| 2 | Usage/invalid input/refused effect, an unknown command or a hidden write |
 | 3 | Not found |
 | 4 | Authentication/permission |
 | 5 | Native API/unknown transport error |
@@ -385,7 +386,19 @@ lemonsqueezy-cli schema refund-order
 
 MCP can load all schemas, defer discovery or select individual tools; the client's loading mode changes overhead. CLI tasks still need help/schema discovery, command execution and model-readable output. --agent uses compact JSON formatting and --select can narrow results, without changing the requested native operation or proving cheaper successful completion.
 
-Codex is the current validation priority. No equivalent completed provider task/token benchmark exists for this release. Record model, client/package versions, date, loading settings, equivalent requested outcome, actual input/output/cache token usage and latency before publishing measured comparisons. Character estimates, tool counts, synthetic discovery and borrowed integration numbers are not task benchmarks. Claude Code-specific measurements remain deferred at Navid's instruction.
+Measured on 2026-10-05 against 2.0.1, with Claude Code 2.1.286 on Claude Opus 5.5 (one short prompt with and without the server connected, the difference read from the API's own usage figures) and Codex 0.159.3 on gpt-6.1-sol:
+
+| Cost | 2.0.1 | 3.0.0 |
+| --- | --- | --- |
+| Claude Code, every tool loaded, every message | 32,838 | 31,362 |
+| Claude Code's default, tool search, every message | 1,256 | 1,254 |
+| `SKILL.md`, read once | 3,851 | 3,936 |
+| Codex over the CLI, one task, median of five | 61,546 | 61,907 |
+| Codex over MCP, the same task, median of five | 41,601 | 41,644 |
+
+The task was "find the command that cancels a subscription, and the flags it requires". Every tool loaded costs less because parts that several tools repeated are written once. Over the CLI, both versions took two commands: 2.0.1's runs guessed the command's name and read its help, and 3.0.0's asked `which`, whose answer gives the help as well. 3.0.0's general help is longer, for `which`, `install`, what each setting is for and the exit codes, which with the answer's list lines costs 361 tokens more. Over MCP, the medians are 43 apart, within the spread of 2.0.1's own runs. `SKILL.md` costs 85 more because it says how approval works over MCP and how `which` finds a command, and what exit codes 1 and 2 cover.
+
+Tool-list bytes or characters divided by four are not API usage, and no other offering was measured.
 
 
 ## 8. Every tool and argument
@@ -659,7 +672,7 @@ Creates a unique checkout for a specific variant with specified attributes.
 | `store_id` | string | Optional | Reviewed native/schema value {"pattern": "^[A-Za-z0-9_-]+$"} |
 | `variant_id` | string | Optional | Reviewed native/schema value {"pattern": "^[A-Za-z0-9_-]+$"} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.data` | object | Required | Reviewed native/schema value |
 | `payload.data.type` | schema | Required | Reviewed native/schema value {"const": "checkouts"} |
@@ -2471,7 +2484,7 @@ Creates a customer with given attributes.
 | `country` | string | Optional | Reviewed native/schema value {"minLength": 1, "pattern": "^[A-Z]{2}$"} |
 | `store_id` | string | Optional | Reviewed native/schema value {"pattern": "^[A-Za-z0-9_-]+$"} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.data` | object | Required | Reviewed native/schema value |
 | `payload.data.type` | schema | Required | Reviewed native/schema value {"const": "customers"} |
@@ -3104,7 +3117,7 @@ Updates the customer with the given ID and provided attributes.
 | `country` | string | Optional | Reviewed native/schema value {"minLength": 1, "pattern": "^[A-Z]{2}$"} |
 | `status` | string | Optional | Reviewed native/schema value {"enum": ["archived"]} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.data` | object | Required | Reviewed native/schema value |
 | `payload.data.type` | schema | Required | Reviewed native/schema value {"const": "customers"} |
@@ -3683,7 +3696,7 @@ Create a discount.
 | `store_id` | string | Optional | Reviewed native/schema value {"pattern": "^[A-Za-z0-9_-]+$"} |
 | `variants_ids` | array | Optional | Reviewed native/schema value {"minItems": 1, "maxItems": 100} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.data` | object | Required | Reviewed native/schema value |
 | `payload.data.type` | schema | Required | Reviewed native/schema value {"const": "discounts"} |
@@ -4315,7 +4328,7 @@ Delete a discount with the given ID.
 | --- | --- | --- | --- |
 | `id` | string | Required | Exact opaque native resource ID; no traversal or URL. {"minLength": 1, "maxLength": 256, "pattern": "^[A-Za-z0-9_-]+$"} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 
 ~~~bash
 lemonsqueezy-cli delete-discount --help
@@ -4870,7 +4883,7 @@ Use the selected private profile license credential for native activate license.
 | --- | --- | --- | --- |
 | `instance_name` | string | Optional | New native activation instance label. {"minLength": 1} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.instance_name` | string | Required | New native activation instance label. {"minLength": 1} |
 | `payload_file` | string | Optional | Absolute regular non-symlink native JSON body file at most 1 MiB; cannot mix with payload or body flags. {"minLength": 1} |
@@ -4975,7 +4988,7 @@ Use the selected private profile license credential for native deactivate licens
 | --- | --- | --- | --- |
 | `instance_id` | string | Optional | Native instance ID returned by activation. {"minLength": 1} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.instance_id` | string | Required | Native instance ID returned by activation. {"minLength": 1} |
 | `payload_file` | string | Optional | Absolute regular non-symlink native JSON body file at most 1 MiB; cannot mix with payload or body flags. {"minLength": 1} |
@@ -5745,7 +5758,7 @@ Updates the license key with the given ID and provided attributes.
 | `expires_at` | ['string', 'null'] | Optional | Reviewed native/schema value {"format": "date-time"} |
 | `disabled` | boolean | Optional | Reviewed native/schema value |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.data` | object | Required | Reviewed native/schema value |
 | `payload.data.type` | schema | Required | Reviewed native/schema value {"const": "license-keys"} |
@@ -6277,7 +6290,7 @@ Generates a new invoice for the given order with given attributes.
 | `notes` | string | Optional | Native invoice query field; US/CA state is required. {"minLength": 1} |
 | `locale` | string | Optional | Native invoice query field; US/CA state is required. {"minLength": 1} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `output_file` | string | Required | Required absolute NEW private file for the signed checkout/invoice URL; exclusive0600, no overwrite. {"minLength": 1} |
 
 ~~~bash
@@ -6518,7 +6531,7 @@ Issue the exact requested partial refund, or an explicitly named full refund. Lo
 | `amount` | integer | Optional | Reviewed native/schema value {"minimum": 1} |
 | `full_refund` | boolean | Optional | Explicit full-refund intent. Must be true with no amount; cannot coexist with amount. |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.data` | object | Required | Reviewed native/schema value |
 | `payload.data.type` | schema | Required | Reviewed native/schema value {"const": "orders"} |
@@ -7689,7 +7702,7 @@ Generates a new invoice for the given subscription with given parameters.
 | `notes` | string | Optional | Native invoice query field; US/CA state is required. {"minLength": 1} |
 | `locale` | string | Optional | Native invoice query field; US/CA state is required. {"minLength": 1} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `output_file` | string | Required | Required absolute NEW private file for the signed checkout/invoice URL; exclusive0600, no overwrite. {"minLength": 1} |
 
 ~~~bash
@@ -7935,7 +7948,7 @@ Issue the exact requested partial refund, or an explicitly named full refund. Lo
 | `amount` | integer | Optional | Reviewed native/schema value {"minimum": 1} |
 | `full_refund` | boolean | Optional | Explicit full-refund intent. Must be true with no amount; cannot coexist with amount. |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.data` | object | Required | Reviewed native/schema value |
 | `payload.data.type` | schema | Required | Reviewed native/schema value {"const": "subscription-invoices"} |
@@ -8771,7 +8784,7 @@ Updates the subscription with the given ID and provided attributes.
 | `invoice_immediately` | boolean | Optional | Reviewed native/schema value |
 | `disable_prorations` | boolean | Optional | Reviewed native/schema value |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.data` | object | Required | Reviewed native/schema value |
 | `payload.data.type` | schema | Required | Reviewed native/schema value {"const": "subscription-items"} |
@@ -8993,7 +9006,7 @@ Cancels an active subscription.
 | --- | --- | --- | --- |
 | `id` | string | Required | Exact opaque native resource ID; no traversal or URL. {"minLength": 1, "maxLength": 256, "pattern": "^[A-Za-z0-9_-]+$"} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 
 ~~~bash
 lemonsqueezy-cli cancel-subscription --help
@@ -9461,7 +9474,7 @@ Updates the subscription with the given ID and provided attributes.
 | `invoice_immediately` | boolean | Optional | Reviewed native/schema value |
 | `disable_prorations` | boolean | Optional | Reviewed native/schema value |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.data` | object | Required | Reviewed native/schema value |
 | `payload.data.type` | schema | Required | Reviewed native/schema value {"const": "subscriptions"} |
@@ -9871,7 +9884,7 @@ Create a usage record.
 | `action` | string | Optional | Reviewed native/schema value {"enum": ["increment", "set"]} |
 | `subscription_item_id` | string | Optional | Reviewed native/schema value {"pattern": "^[A-Za-z0-9_-]+$"} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.data` | object | Required | Reviewed native/schema value |
 | `payload.data.type` | schema | Required | Reviewed native/schema value {"const": "usage-records"} |
@@ -10716,7 +10729,7 @@ Creates a webhook.
 | `test_mode` | boolean | Optional | Reviewed native/schema value |
 | `store_id` | string | Optional | Reviewed native/schema value {"pattern": "^[A-Za-z0-9_-]+$"} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.data` | object | Required | Reviewed native/schema value |
 | `payload.data.type` | schema | Required | Reviewed native/schema value {"const": "webhooks"} |
@@ -11074,7 +11087,7 @@ Delete a webhook with the given ID.
 | --- | --- | --- | --- |
 | `id` | string | Required | Exact opaque native resource ID; no traversal or URL. {"minLength": 1, "maxLength": 256, "pattern": "^[A-Za-z0-9_-]+$"} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 
 ~~~bash
 lemonsqueezy-cli delete-webhook --help
@@ -11394,7 +11407,7 @@ Updates the webhook with the given ID and provided attributes.
 | `events` | array | Optional | Reviewed native/schema value {"minItems": 1, "maxItems": 100} |
 | `secret` | string | Optional | Private replacement signing secret; prefer payload_file. {"minLength": 1} |
 | `account` | string | Optional | Exact private profile label. Does not prove store ownership; mode applies to the main API key only. |
-| `confirm` | boolean | Optional | Explicit approval for this requested effect, including private output files. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `payload` | object | Optional | Complete native JSON object body. JSON:API uses data/type/id/attributes/relationships. No mixing with body flags or payload_file. License credential is private configuration, never body input. |
 | `payload.data` | object | Required | Reviewed native/schema value |
 | `payload.data.type` | schema | Required | Reviewed native/schema value {"const": "webhooks"} |
@@ -11837,7 +11850,7 @@ Confirmed one-to-twenty ordered effects. Prevalidate all and check the exact rev
 | `tasks[].tool` | string | Required | Reviewed native/schema value {"enum": ["create_customer", "update_customer", "create_discount", "delete_discount", "activate_license", "deactivate_license", "update_license_key", "refund_order", "refund_subscription_invoice", "update_subscription_item", "cancel_subscription", "update_subscription", "create_usage_record", "create_webhook", "delete_webhook", "update_webhook"]} |
 | `tasks[].arguments` | object | Required | Native arguments without account, confirm, payload_file or output_file. |
 | `account` | string | Optional | Exact selected private account profile; binds label, not key ownership. |
-| `confirm` | boolean | Optional | Explicit approval for this exact requested ordered batch. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `review_sha256` | string | Required | Exact preview_commerce_batch hash for identical tasks, selected profile/mode/schema/order. {"pattern": "^[a-f0-9]{64}$"} |
 
 ~~~bash
@@ -11921,7 +11934,7 @@ Confirmed paginated JSON:API export to a new exclusive0600 file. Preserves data 
 | `operation` | string | Required | Reviewed native/schema value {"enum": ["list_affiliates", "list_checkouts", "list_customers", "list_discount_redemptions", "list_discounts", "list_files", "list_license_key_instances", "list_license_keys", "list_order_items", "list_orders", "list_prices", "list_products", "list_stores", "list_subscription_invoices", "list_subscription_items", "list_subscriptions", "list_usage_records", "list_variants", "list_webhooks"]} |
 | `arguments` | object | Optional | Actual selected list-operation filters/page/per_page/include only; no profile override. |
 | `account` | string | Optional | Exact selected private account profile; binds label, not key ownership. |
-| `confirm` | boolean | Optional | Explicit approval for this exact requested ordered batch. |
+| `confirm` | boolean | Optional | Set true only when the user asked for exactly this action. |
 | `start_offset` | integer | Optional | Reviewed native/schema value {"minimum": 0, "maximum": 99} |
 | `max_pages` | integer | Optional | Local budget default10. {"minimum": 1, "maximum": 100} |
 | `max_items` | integer | Optional | Local budget default1000. {"minimum": 1, "maximum": 10000} |
@@ -12097,12 +12110,14 @@ A store_id filter narrows a list query. An exact resource ID may target a resour
 
 All 19 native effects plus batch execution and private export require explicit local confirm. LEMONSQUEEZY_READ_ONLY=1 hides all 21 effects and refuses direct hidden confirmed calls through the actual handler. LEMONSQUEEZY_ALLOW_DESTRUCTIVE=0 refuses them even when confirmed. --agent and --yes change output/input formatting only, never approval. The same guard covers CLI and MCP, including POST license activation/deactivation and signed-output generation.
 
+Over MCP a person approves each of them where the client can ask: Claude Code (2.1.246 and later) shows its own prompt, and a client that can show forms asks with an approval form whose one box starts unticked. Each approval is signed, bound to that exact call and works once. Where a client can do neither, the model's confirm:true counts. LEMONSQUEEZY_CONFIRM=model makes confirm:true enough everywhere, for an agent with no person to ask.
+
 READ_ONLY controls this process, not other clients or provider automations. Native access rights, financial correctness, license entitlement and customer authorization stay separate. Main-key mode checks are native reads, not store ownership checks. A local review hash is not a provider-issued approval token or state lock. No automatic retries or guessed continuations are performed after an uncertain effect.
 
 
 ## 13. How the two surfaces work
 
-src/tools/index.ts exports the shared definitions. Local MCP registers their input schemas and handlers; the existing house CLI bridge invokes the actual server through SDK in-memory transport. Both share native compilation, profiles, validation and WriteGuard. operations.json is a reviewed contract snapshot with examples removed, not an official OpenAPI export. provenance.json records primary source, pinned SDK, date and digest.
+src/tools/index.ts exports the shared definitions. Local MCP registers their input schemas and handlers; [Slipway](https://github.com/thenavidm/slipway) builds the MCP server, over stdio or `--http`, and the CLI from them. Both share native compilation, profiles, validation and the write guard. operations.json is a reviewed contract snapshot with examples removed, not an official OpenAPI export. provenance.json records primary source, pinned SDK, date and digest.
 
 ## 14. Your data
 
@@ -12127,6 +12142,12 @@ Audit logging is optional, private and best-effort for static guard decisions; i
 | LEMONSQUEEZY_AUDIT_LOG | Optional private best-effort static guard-decision log |
 | LEMONSQUEEZY_REQUEST_TIMEOUT_MS | Default 30000; local accepted range 100–300000 ms |
 | LEMONSQUEEZY_MIN_REQUEST_INTERVAL_MS | Default 1000; local accepted range 0–10000 ms; not distributed quota enforcement |
+| LEMONSQUEEZY_CONFIRM | human by default; model lets confirm:true alone approve over MCP, for an agent with no person to ask |
+| LEMONSQUEEZY_SURFACE | full by default; search lists three tools that find, describe and run the rest |
+| LEMONSQUEEZY_TOOL_TIMEOUT_MS | Give up on any tool after this long |
+| LEMONSQUEEZY_HTTP_PORT, LEMONSQUEEZY_HTTP_HOST, LEMONSQUEEZY_HTTP_TOKEN | For --http: port 8787 and host 127.0.0.1 by default; any other host needs the bearer token |
+| LEMONSQUEEZY_HTTP_ALLOWED_ORIGINS | Comma-separated browser origins allowed to call --http; a page from any other site is refused |
+| LEMONSQUEEZY_DEBUG | 1 prints debug lines on stderr |
 
 ## 16. Updates and removal
 
@@ -12187,13 +12208,14 @@ Choose it for the owned shared task CLI/local MCP, private profiles, explicit pe
 
 | Component | Reviewed version/evidence |
 | --- | --- |
-| Package/desktop | 2.0.0; public source/npm/desktop verification recorded separately |
+| Package/desktop | 3.0.0; public source/npm/desktop verification recorded separately |
+| Slipway | 0.1.20 |
 | Native API | v1, 60 reviewed operations checked 2026-10-03 |
 | Official SDK | 4.0.0, pinned source only |
 | YawLabs community | 1.0.1 at 7dfff25e0117470c6fa2335b1067cd111eb01e6b |
 | Node | >=22 |
 | Private legacy | 1.0.0, all 51 tool names preserved |
-| Codex task/token comparison | Pending actual equivalent provider outcomes |
+| Codex task/token comparison | Measured against 2.0.1 in README section 7 |
 
 | Legacy contract | Current requirement |
 | --- | --- |
@@ -12278,7 +12300,7 @@ No. store_id narrows supported list queries, while a resource ID can target anyt
 <details>
 <summary><b>How do CLI and MCP stay consistent?</b></summary>
 
-The same tool definitions, input schemas, native request compiler, account selection and WriteGuard serve both. The house CLI invokes the actual MCP server through SDK in-memory transport; no separate API implementation is maintained.
+The same tool definitions, input schemas, native request compiler, account selection and write guard serve both. [Slipway](https://github.com/thenavidm/slipway) builds both from each tool's one definition; no separate API implementation is maintained.
 
 </details>
 
@@ -12341,7 +12363,7 @@ Codex, Claude Code, Claude Desktop extension/manual settings, Cursor, VS Code/Co
 <details>
 <summary><b>Does CLI use fewer tokens than MCP?</b></summary>
 
-That remains unmeasured for equivalent completed Codex provider tasks. Client loading mode, discovery, output and task outcome all matter. --agent/--select can narrow formatting/results, but tool counts and character estimates are not token benchmarks.
+In Claude Code the CLI costs nothing until it is used, plus about 3,940 tokens for `SKILL.md` once, where the server costs about 1,250 tokens a message with tool search and 31,400 with every tool loaded. In Codex, finding the command that cancels a subscription and its flags took a median of 61,907 input tokens over the CLI and 41,644 over MCP. Section 7 has how each was measured.
 
 </details>
 
@@ -12376,7 +12398,8 @@ If this is useful, star the repo and come say hi on [X](https://x.com/thenavidm)
 
 | Dependency | Exact lock version | Role |
 | --- | --- | --- |
-| @modelcontextprotocol/sdk | 1.32.0 | Runtime |
+| @thenavidm/slipway | 0.1.20 | Runtime: the MCP server and the CLI from one definition of each tool |
+| MCP TypeScript SDK, through Slipway | 2.3.0 | Runtime |
 | ajv | 8.20.0 | Runtime |
 | ajv-formats | 3.0.1 | Runtime |
 | @anthropic-ai/mcpb | 2.1.2 | Development/packaging |
